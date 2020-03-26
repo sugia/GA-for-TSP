@@ -8,7 +8,6 @@
 #ifndef __ENVIRONMENT__
 #include "environment.h"
 #endif
-
 #include <math.h> 
 
 void MakeRandSol(TEvaluator* eval, TIndi& indi);
@@ -35,12 +34,10 @@ void TEnvironment::define(){
 	fIndexForMating = new int [ Npop + 1 ];  
 	tCurPop = new TIndi [ Npop ];
 	for ( int i = 0; i < Npop; ++i ) tCurPop[i].define( N );
-
 	tBest.define( N );
 	tCross = new TCross( N );
 	tCross->eval = fEvaluator;                 
 	tCross->Npop = Npop;             
-
 	tKopt = new TKopt( N );
 	tKopt->eval = fEvaluator;
 	tKopt->setInvNearList();

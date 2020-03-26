@@ -8,7 +8,6 @@
 #ifndef __EVALUATOR__
 #include "evaluator.h"
 #endif
-
 TEvaluator::TEvaluator(){
 	fEdgeDis = NULL;
 	fNearCity = NULL;
