@@ -42,52 +42,65 @@ void TEvaluator::setInstance( char filename[] ){
 			fscanf( fp, "%s", type ); 
 		} 
 		if( strcmp( word, "NODE_COORD_SECTION" ) == 0 ) break;
+		if( strcmp( word, "EDGE_WEIGHT_SECTION" ) == 0 ) break;
 	}
-	if( strcmp( word, "NODE_COORD_SECTION" ) != 0 ){
+	fEdgeDis = new int* [ Ncity ];
+	for( int i = 0; i < Ncity; ++i ) fEdgeDis[ i ] = new int [ Ncity ];
+	int *checkedN = new int[Ncity];
+	if( strcmp( word, "NODE_COORD_SECTION" ) == 0 ){
+		x = new double [ Ncity ]; 
+		y = new double [ Ncity ]; 
+		for( int i = 0; i < Ncity; ++i ){
+			fscanf( fp, "%d", &n );
+			fscanf( fp, "%s", word ); 
+			x[ i ] = atof( word );
+			fscanf( fp, "%s", word ); 
+			y[ i ] = atof( word );
+		}
+		fclose(fp);
+			
+		if( strcmp( type, "EUC_2D" ) == 0  ) {
+			for( int i = 0; i < Ncity ; ++i )
+				for( int j = 0; j < Ncity ; ++j )
+					fEdgeDis[ i ][ j ]=(int)(sqrt((x[i]-x[j])*(x[i]-x[j])+(y[i]-y[j])*(y[i]-y[j]))+0.5);
+		}
+		else if( strcmp( type, "ATT" ) == 0  ) { 
+			for( int i = 0; i < Ncity; ++i ){
+				for( int j = 0; j < Ncity; ++j ) {
+					double r = (sqrt(((x[i]-x[j])*(x[i]-x[j])+(y[i]-y[j])*(y[i]-y[j]))/10.0));
+					int t = (int)r;
+					if( (double)t < r ) fEdgeDis[ i ][ j ] = t+1;
+					else fEdgeDis[ i ][ j ] = t; 
+				}
+			}
+		}
+		else if( strcmp( type, "CEIL_2D" ) == 0  ){  
+		for( int i = 0; i < Ncity ; ++i )
+			for( int j = 0; j < Ncity ; ++j )
+				fEdgeDis[ i ][ j ]=(int)ceil(sqrt((x[i]-x[j])*(x[i]-x[j])+(y[i]-y[j])*(y[i]-y[j])));
+		}
+		else{
+			printf( "EDGE_WEIGHT_TYPE is not supported\n" );
+			exit( 1 );
+		}
+	} 
+	else if(strcmp( word, "EDGE_WEIGHT_SECTION" ) == 0){
+		for( int i = 0; i < Ncity; ++i ){
+			for( int j = 0; j < Ncity; ++j ){
+				fscanf( fp, "%s", word ); 
+				fEdgeDis[ i ][ j ] = atoi( word );
+			}
+		}
+		fclose(fp);
+	}
+	else{
 		printf( "Error in reading the instance\n" );
 		exit(0);
 	}
-	x = new double [ Ncity ]; 
-	y = new double [ Ncity ]; 
-	int *checkedN = new int[Ncity];
-
-	for( int i = 0; i < Ncity; ++i ){
-		fscanf( fp, "%d", &n );
-		fscanf( fp, "%s", word ); 
-		x[ i ] = atof( word );
-		fscanf( fp, "%s", word ); 
-		y[ i ] = atof( word );
-	}
-	fclose(fp);
-	fEdgeDis = new int* [ Ncity ];
-	for( int i = 0; i < Ncity; ++i ) fEdgeDis[ i ] = new int [ Ncity ];
+	
 	fNearCity = new int* [ Ncity ];
-	for( int i = 0; i < Ncity; ++i ) fNearCity[ i ] = new int [ fNearNumMax+1 ];
-
-	if( strcmp( type, "EUC_2D" ) == 0  ) {
-		for( int i = 0; i < Ncity ; ++i )
-			for( int j = 0; j < Ncity ; ++j )
-				fEdgeDis[ i ][ j ]=(int)(sqrt((x[i]-x[j])*(x[i]-x[j])+(y[i]-y[j])*(y[i]-y[j]))+0.5);
-	}
-	else if( strcmp( type, "ATT" ) == 0  ) { 
-		for( int i = 0; i < Ncity; ++i ){
-			for( int j = 0; j < Ncity; ++j ) {
-				double r = (sqrt(((x[i]-x[j])*(x[i]-x[j])+(y[i]-y[j])*(y[i]-y[j]))/10.0));
-				int t = (int)r;
-				if( (double)t < r ) fEdgeDis[ i ][ j ] = t+1;
-				else fEdgeDis[ i ][ j ] = t; 
-			}
-		}
-	}
-	else if( strcmp( type, "CEIL_2D" ) == 0  ){  
-	for( int i = 0; i < Ncity ; ++i )
-		for( int j = 0; j < Ncity ; ++j )
-			fEdgeDis[ i ][ j ]=(int)ceil(sqrt((x[i]-x[j])*(x[i]-x[j])+(y[i]-y[j])*(y[i]-y[j])));
-	}
-	else{
-		printf( "EDGE_WEIGHT_TYPE is not supported\n" );
-		exit( 1 );
-	}
+	for( int i = 0; i < Ncity; ++i ) fNearCity[ i ] = new int [ fNearNumMax+1 ];	
+	
 	int ci, j1, j2, j3;
 	int cityNum = 0;
 	int minDis;
