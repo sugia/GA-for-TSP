@@ -1,8 +1,8 @@
 /*
  * sort.cpp
  *   created on: April 24, 2013
- * last updated: June 13, 2013
- *       author: liushujia
+ * last updated: May 10, 2020
+ *       author: Shujia Liu
  */
 
 #ifndef __Sort__
@@ -21,7 +21,7 @@ void swap(int &x, int &y){
 	y=s;
 }
 
-void selectionSort(int* Arg, int l, int r){
+void selectionSort(vector<int>& Arg, int l, int r){
 	int id;
 	for(int i=l;i<r;++i){
 		id=i;
@@ -31,7 +31,7 @@ void selectionSort(int* Arg, int l, int r){
 	}
 }
 
-int partition(int* Arg, int l, int r){
+int partition(vector<int>& Arg, int l, int r){
 	int id=l+rand()%(r-l+1);
 	swap(Arg[l], Arg[id]);
 	id=l;
@@ -41,9 +41,9 @@ int partition(int* Arg, int l, int r){
 	return id;
 }
 
-void quickSort(int* Arg, int l, int r){
+void quickSort(vector<int>& Arg, int l, int r){
 	if(l<r){
-		if(r-l<20){	// 小规模数据用选择排序速度更快
+		if(r-l<20){	// utilizes selection sort for small batch of data
 			selectionSort(Arg, l, r);
 			return ;
 		}
@@ -56,7 +56,7 @@ void quickSort(int* Arg, int l, int r){
 TSort::TSort(){}
 TSort::~TSort(){}
 
-void TSort::index( double* Arg, int numOfArg, int* indexOrderd, int numOfOrd ){
+void TSort::index(vector<double>& Arg, int numOfArg, vector<int>& indexOrderd, int numOfOrd){
 	int indexBest = 0;
 	double valueBest;
 	int *checked = new int [ numOfArg ];
@@ -75,8 +75,8 @@ void TSort::index( double* Arg, int numOfArg, int* indexOrderd, int numOfOrd ){
 	delete [] checked;
 }
 
-void TSort::indexB( double* Arg, int numOfArg, int* indexOrderd, int numOfOrd ){
-	int indexBest = 0; 
+void TSort::indexB(vector<double>& Arg, int numOfArg, vector<int>& indexOrderd, int numOfOrd){
+	int indexBest = 0;
 	double valueBest;
 	int *checked = new int [ numOfArg ];
 	for( int i = 0 ; i < numOfArg ; ++i ) checked[ i ] = 0;
@@ -94,7 +94,7 @@ void TSort::indexB( double* Arg, int numOfArg, int* indexOrderd, int numOfOrd ){
 	delete [] checked;
 }
 
-void TSort::index( int* Arg, int numOfArg, int* indexOrderd, int numOfOrd ){
+void TSort::index(vector<int>& Arg, int numOfArg, vector<int>& indexOrderd, int numOfOrd){
 	int indexBest = 0;
 	int valueBest;
 	int *checked = new int [ numOfArg ];
@@ -113,7 +113,7 @@ void TSort::index( int* Arg, int numOfArg, int* indexOrderd, int numOfOrd ){
 	delete [] checked;
 }
 
-void TSort::indexB( int* Arg, int numOfArg, int* indexOrderd, int numOfOrd ){
+void TSort::indexB(vector<int>& Arg, int numOfArg, vector<int>& indexOrderd, int numOfOrd){
 	int indexBest = 0;
 	int valueBest;
 	int *checked = new int [ numOfArg ];
@@ -132,7 +132,7 @@ void TSort::indexB( int* Arg, int numOfArg, int* indexOrderd, int numOfOrd ){
 	delete [] checked;
 }
 
-void TSort::sort( int* Arg, int numOfArg ){
+void TSort::sort(vector<int>& Arg, int numOfArg){
 	//selectionSort(Arg, 0, numOfArg-1);
 	quickSort(Arg, 0, numOfArg-1);
 }

@@ -1,8 +1,8 @@
 /*
  * environment.h
  *   created on: April 24, 2013
- * last updated: June 13, 2013
- *       author: liushujia
+ * last updated: May 10, 2020
+ *       author: Shujia Liu
  */
 
 #ifndef __ENVIRONMENT__
@@ -33,53 +33,54 @@
 #include <assert.h>
 #include <string.h>
 #include <time.h>
+#include <vector>
 
 class TEnvironment{
 public:
-	TEnvironment(); 
+	TEnvironment();
 	~TEnvironment();
 
-	void define();						// 初始化
-	void doIt();						// GA主程序
-	void init();						// GA初始化
-	bool terminationCondition();		// 退出条件          
-	void setAverageBest();				// 计算种群平均TSP长度与种群最优TSP长度        
+	void define(); // global initialization
+	void doIt(); // entry point of genetic algorithm
+	void init(); // initializes genetic algorithm
+	bool terminationCondition(); // condition to termination the genetic algorithm
+	void setAverageBest(); // sets the average distance of TSP and the shortest distance of TSP
 
-	void initPop();						// 初始化种群
-	void selectForMating();				// 选择父本与母本                
-	void generateKids( int s );			// 产生并选择子代            
-	void getEdgeFreq();					// 计算种群中每条边的频率                    
+	void initPop(); // initializes population
+	void selectForMating(); // selects parents
+	void generateKids( int s ); // generates and selects children
+	void getEdgeFreq(); // calculates the frequency of each edge
 
-	void printOn( int n );				// 输出结果
-	void writeBest();					// 输出最优TSP路径
+	void printOn( int n ); // logs out results
+	void writeBest(); // logs out the best TSP solution
 
-	TEvaluator* fEvaluator;				// 边距离
-	TCross* tCross;						// 边集合交叉
-	TKopt* tKopt;						// 局部搜索(2-opt neighborhood)
-	char *fFileNameTSP;					// TSP文件名
+	TEvaluator* fEvaluator; // distance of each edge
+	TCross* tCross; // intersection of edge sets
+	TKopt* tKopt; // local search (2-opt neighborhood)
+	char *fFileNameTSP; // file name of TSP
 
-	int Npop;							// 种群数量                   
-	int Nch;							// 每个父本(母本)产生的子代数量                      
-	TIndi* tCurPop;						// 当前种群成员
-	TIndi tBest;						// 当前种群最优解
-	int fCurNumOfGen;					// 当前种群代数
-	long int fAccumurateNumCh;			// 子代累计数目             
+	int Npop; // the number of population
+	int Nch; // the number of children generated from one pair of parent
+	TIndi* tCurPop; // the member of the current population
+	TIndi tBest; // the best solution from the current population
+	int fCurNumOfGen; // the number of generations of the current population
+	long int fAccumurateNumCh; // accumulated number of children so far
 
-	int fBestNumOfGen;					// 当前最优解所在的代数                     
-	long int fBestAccumeratedNumCh;		// 当前最优解的子代累计数目        
-	int **fEdgeFreq;					// 种群的边频率
-	double fAverageValue;				// 种群TSP路径的平均长度                  
-	int fBestValue;						// 种群最优解的路径长度                        
-	int fBestIndex;						// 最优种群的下标
+	int fBestNumOfGen; // the number of generations that generates the current best solution
+	long int fBestAccumeratedNumCh; // accumulated number of generations of the current best solution
+	vector<vector<int>> fEdgeFreq; // edge frequency of a population
+	double fAverageValue; // average road length of TSP in a population
+	int fBestValue; // road length of the best solution in a population
+	int fBestIndex;	// index of the best solution in a population
 
-	int* fIndexForMating;				// 交叉列表(r[])
-	int fStagBest;						// 子代最优解没有提升的累计代数                         
-	int fFlagC[ 10 ];					// EAX方式与选择策略                      
-	int fStage;							// 当前阶段
-	int fMaxStagBest;					// fStagBest==fMaxStagBest时执行下一阶段                      
-	int fCurNumOfGen1;					// Stage I结束时的种群代数                     
+	vector<int> fIndexForMating; // list for edge cross operation
+	int fStagBest; // accumulated number of generations that doesn't generate a better solution compared to previous generation
+	int fFlagC[ 10 ]; // EAX method and selection strategy
+	int fStage; // the current step of genetic algorithm
+	int fMaxStagBest; // the genetic algorithm goes into the next stage when fStagBest == fMaxStagBest
+	int fCurNumOfGen1; // the number of generations when stage 1 completes
 
-	clock_t fTimeStart, fTimeInit, fTimeEnd;	// 保存计算时间
+	clock_t fTimeStart, fTimeInit, fTimeEnd; // saves calculation time
 };
 
 #endif

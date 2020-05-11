@@ -1,8 +1,8 @@
 /*
  * cross.h
  *   created on: April 24, 2013
- * last updated: June 13, 2013
- *       author: liushujia
+ * last updated: May 10, 2020
+ *       author: Shujia Liu
  */
 
 #ifndef __Cross__
@@ -24,41 +24,42 @@
 #include "evaluator.h"
 #endif
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
+#include <vector>
 
 class TCross{
 public:
 	TCross( int N );
 	~TCross();
-	void doIt( TIndi& tKid, TIndi& tPa2, int numOfKids, int flagP, int flagC[ 10 ], int** fEdgeFreq );	// EAX主程序
-	void setParents( const TIndi& tPa1, const TIndi& tPa2, int flagC[ 10 ], int numOfKids );			// 设置父本与母本
-	void setABcycle( const TIndi& parent1, const TIndi& parent2, int flagC[ 10 ], int numOfKids );		// 设置ABcycle
+	void doIt( TIndi& tKid, TIndi& tPa2, int numOfKids, int flagP, int flagC[ 10 ], vector<vector<int>>& fEdgeFreq ); // EAX entry point
+	void setParents( const TIndi& tPa1, const TIndi& tPa2, int flagC[ 10 ], int numOfKids ); // sets parents
+	void setABcycle( const TIndi& parent1, const TIndi& parent2, int flagC[ 10 ], int numOfKids ); // sets ab cycle
 
-	void swap(int &x, int &y); 
-	void formABcycle();																// 保存ABcycle
-	void changeSol( TIndi& tKid, int ABnum, int type );								// 用ABcycle产生中间解
+	void swap(int &x, int &y);
+	void formABcycle(); // saves ab cycle
+	void changeSol( TIndi& tKid, int ABnum, int type ); // generates intermediate solution from ab cycle
 
-	void makeCompleteSol( TIndi& tKid );					// EAX第5步
-	void makeUnit();										// EAX第5-1步
-	void backToPa1( TIndi& tKid );							// 回滚p_A
-	void goToBest( TIndi& tKid );							// 修改tKid为子代最优解                         
+	void makeCompleteSol( TIndi& tKid ); // the 5th step of EAX
+	void makeUnit(); // the 5-1th step of EAX
+	void backToPa1( TIndi& tKid ); // rolls back p_a
+	void goToBest( TIndi& tKid ); // sets tKid to the best solutions of child generation
 
-	void incrementEdgeFreq( int **fEdgeFreq );				// 增加fEdgeFreq[][]
-	int calAdpLoss( int **fEdgeFreq );						// 计算平均路程的差                 
-	double calEntLoss( int **fEdgeFreq );					// 计算边熵的差             
+	void incrementEdgeFreq(vector<vector<int>>& fEdgeFreq); // increates fEdgeFreq[][]
+	int calAdpLoss(vector<vector<int>>& fEdgeFreq); // calculates the average road distance from fEdgeFreq[][]
+	double calEntLoss(vector<vector<int>>& fEdgeFreq); // calculates the difference of edge entropy from fEdgeFreq[][]
 
 	void setWeight( const TIndi& parent1, const TIndi& parent2 );	// Block2
 	int	calCNaive();
-	void searchEset( int num ); 
+	void searchEset( int num );
 	void addAB( int num );
 	void deleteAB( int num );
 
 	int fNumOfGeneratedCh;
-	TEvaluator* eval;			 
+	TEvaluator* eval;
 	int Npop;
-  
+
 private:
 	TIndi tBestTmp;
 	int fFlagImp;
@@ -84,22 +85,22 @@ private:
 	int fPosiCurr;
 	int fMaxNumOfABcycle;
 
-	int *koritsu;
-	int *bunki;
-	int *koriInv;
-	int *bunInv;
-	int *checkKoritsu;
-	int *fRoute;
-	int *fPermu;
-	int *fC;
-	int *fJun;
-	int *fOrd1;
-	int *fOrd2;
+	vector<int> koritsu;
+	vector<int> bunki;
+	vector<int> koriInv;
+	vector<int> bunInv;
+	vector<int> checkKoritsu;
+	vector<int> fRoute;
+	vector<int> fPermu;
+	vector<int> fC;
+	vector<int> fJun;
+	vector<int> fOrd1;
+	vector<int> fOrd2;
 
-	int **nearData;
-	int **fABcycle;
+	vector<vector<int>> nearData;
+	vector<vector<int>> fABcycle;
 
-	// Speed Up Start
+	// speeds up start
 	int fNumOfUnit;
 	int fNumOfSeg;
 	int fNumOfSPL;
@@ -109,29 +110,29 @@ private:
 	int fNumOfModiEdge;
 	int fNumOfBestModiEdge;
 	int fNumOfAppliedCycle;
-	int fNumOfBestAppliedCycle; 
+	int fNumOfBestAppliedCycle;
 
-	int *fOrder;
-	int *fInv;
-	int *fSegUnit;
-	int *fSegPosiList;
-	int *LinkAPosi;
-	int *fPosiSeg;
-	int *fNumOfElementInUnit;
-	int *fCenterUnit;
-	int *fListOfCenterUnit;
-	int *fSegForCenter;
-	int *fGainAB;
-	int *fAppliedCylce;
-	int *fBestAppliedCylce;
+	vector<int> fOrder;
+	vector<int> fInv;
+	vector<int> fSegUnit;
+	vector<int> fSegPosiList;
+	vector<int> LinkAPosi;
+	vector<int> fPosiSeg;
+	vector<int> fNumOfElementInUnit;
+	vector<int> fCenterUnit;
+	vector<int> fListOfCenterUnit;
+	vector<int> fSegForCenter;
+	vector<int> fGainAB;
+	vector<int> fAppliedCylce;
+	vector<int> fBestAppliedCylce;
 
-	int **fSegment;
-	int **LinkBPosi;
-	int **fModiEdge;
-	int **fBestModiEdge;           
-	// Speed Up End
+	vector<vector<int>> fSegment;
+	vector<vector<int>> LinkBPosi;
+	vector<vector<int>> fModiEdge;
+	vector<vector<int>> fBestModiEdge;
+	// speeds up end
 
-	// Block2
+	// block2
 	int fNumOfUsedAB;
 	int fNumC;
 	int fNumE;
@@ -142,15 +143,15 @@ private:
 	int fBestNumC;
 	int fBestNumE;
 
-	int *fNumOfElementINAB;
-	int *fWeightSR;
-	int *fWeightC;
-	int *fUsedAB;
-	int *fMovedAB;
-	int *fABcycleInEset; 
+	vector<int> fNumOfElementINAB;
+	vector<int> fWeightSR;
+	vector<int> fWeightC;
+	vector<int> fUsedAB;
+	vector<int> fMovedAB;
+	vector<int> fABcycleInEset;
 
-	int **fInEffectNode;
-	int **fWeightRR; 
+	vector<vector<int>> fInEffectNode;
+	vector<vector<int>> fWeightRR;
 };
 
 #endif

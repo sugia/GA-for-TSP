@@ -1,8 +1,8 @@
 /*
  * indi.h
  *   created on: April 24, 2013
- * last updated: June 13, 2013
- *       author: liushujia
+ * last updated: May 10, 2020
+ *       author: Shujia Liu
  */
 
 #ifndef __INDI__
@@ -19,11 +19,11 @@ public:
 	~TIndi();
 	void define( int N );
 	TIndi& operator = ( const TIndi& src );
-	bool operator == (  const TIndi& indi2 );	// 判断两路径是否相同 
+	bool operator == (  const TIndi& indi2 ); // checks if two roads are equivalent
 
-	int fN;						// 城市数目
-	int** fLink;				// fLink[i][]表示路径中i的两个相邻的城市
-	int fEvaluationValue;		// TSP路径长度
+	int fN; // the number of cities
+	int** fLink; // fLink[i][] is the two adjacent cities of city i
+	int fEvaluationValue; // the road length of TSP
 };
 
 #endif

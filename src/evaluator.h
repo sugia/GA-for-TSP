@@ -1,8 +1,8 @@
 /*
  * evaluator.h
  *   created on: April 24, 2013
- * last updated: June 13, 2013
- *       author: liushujia
+ * last updated: May 10, 2020
+ *       author: Shujia Liu
  */
 
 #ifndef __EVALUATOR__
@@ -19,18 +19,18 @@ class TEvaluator{
 public:
 	TEvaluator();
 	~TEvaluator();
-	void setInstance( char filename[] );		// 设置变量
-	void doIt( TIndi& indi );					// 设置indi.fEvaluationValue
-	void writeTo( FILE* fp, TIndi& indi );		// 输出TSP路径
-	bool checkValid( int* array, int value );	// 检查TSP路径合法性 
+	void setInstance( char filename[] ); // sets variables
+	void doIt( TIndi& indi ); // sets indi.fEvaluationValue
+	void writeTo( FILE* fp, TIndi& indi ); // prints out TSP solution
+	bool checkValid( int* array, int value ); // checks if TSP solution is valid
 
-	int fNearNumMax;	// 近邻点数目的最大值
-	int **fNearCity;	// NearCity[i][k]表示距离i最近的第k个城市
-	int **fEdgeDis;		// EdgeDis[i][j]表示城市i到j的距离
-	int Ncity;			// 城市数目
-	double *x;			// x[i]表示第i个城市的x坐标
-	double *y;			// y[i]表示第i个城市的y坐标
-	int *Array;			// 最优解的节点标号
+	int fNearNumMax; // the maximum value of the number of nearby points
+	int **fNearCity; // NearCity[i][k] is the k points that with a shortest distance from point i
+	int **fEdgeDis; // EdgeDis[i][j] is the distance from city i to city j
+	int Ncity; // the number of cities
+	double *x; // x[i] is the x coordinate of city i
+	double *y; // y[i] is the y coordinate of city i
+	int *Array; // the index of best solution
 };
 
 #endif

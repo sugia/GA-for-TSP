@@ -1,8 +1,8 @@
 /*
  * randomize.h
  *   created on: April 24, 2013
- * last updated: June 13, 2013
- *       author: liushujia
+ * last updated: May 10, 2020
+ *       author: Shujia Liu
  */
 
 #ifndef __RAND__
@@ -12,19 +12,21 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include <vector>
+using namespace std;
 
-extern void InitURandom( int );    
-extern void InitURandom( void );   
+extern void InitURandom( int );
+extern void InitURandom( void );
 
 class TRandom {
 public:
 	TRandom();
 	~TRandom();
-	int Integer( int minNumber, int maxNumber ); 
-	double Double( double minNumber, double maxNumber );
-	double normalDistribution( double mu, double sigma );
-	void permutation( int *array, int numOfelement, int numOfSample );	// 随机产生种群的一个排列
-	void shuffle( int *array, int numOfElement );						// 根据产生的排列调整种群中的个体位置
+	int Integer(int minNumber, int maxNumber);
+	double Double(double minNumber, double maxNumber);
+	double normalDistribution(double mu, double sigma);
+	void permutation(vector<int>& array, int numOfelement, int numOfSample); // generates random permutation of a given population
+	void shuffle(vector<int>& array, int numOfElement); // random shuffles individuals in a given population
 };
 
 extern TRandom* tRand;

@@ -1,8 +1,8 @@
 /*
  * randomize.cpp
  *   created on: April 24, 2013
- * last updated: June 13, 2013
- *       author: liushujia
+ * last updated: May 10, 2020
+ *       author: Shujia Liu
  */
 
 #ifndef __RAND__
@@ -14,7 +14,7 @@ TRandom* tRand = NULL;
 void InitURandom(){
 	int seed;
 	unsigned short seed16v[3];
-	seed = 1111;     
+	seed = 1111;
 	seed16v[0] = 100;
 	seed16v[1] = 200;
 	seed16v[2] = seed;
@@ -25,7 +25,7 @@ void InitURandom(){
 void InitURandom( int dd ){
 	int seed;
 	unsigned short seed16v[3];
-	seed = dd;       
+	seed = dd;
 	seed16v[0] = 100;
 	seed16v[1] = 200;
 	seed16v[2] = seed;
@@ -36,33 +36,31 @@ void InitURandom( int dd ){
 TRandom::TRandom(){}
 TRandom::~TRandom(){}
 
-int TRandom::Integer( int minNumber, int maxNumber ){
+int TRandom::Integer(int minNumber, int maxNumber){
 	return minNumber + (rand() % (maxNumber - minNumber + 1));
 }
 
-double TRandom::Double( double minNumber, double maxNumber ){
+double TRandom::Double(double minNumber, double maxNumber){
 	return minNumber + rand() % (int)(maxNumber - minNumber);
 }
 
-void TRandom::permutation( int *array, int numOfElement, int numOfSample ){
-	if( numOfElement <= 0 ) return;
-	int i, j, k, r;
-	int *b = new int[numOfElement];
-	for(j=0;j<numOfElement;j++) b[j]=0;
-	for(i=0;i<numOfSample;i++){  
-		r=rand()%(numOfElement-i);
-		k=0;
-		for(j=0;j<=r;j++){
-			while(b[k]==1) ++k;
-			k++;
-		}
-		array[i]=k-1;
-		b[k-1]=1;
+void TRandom::permutation(vector<int>& array, int numOfElement, int numOfSample){
+	if(numOfElement <= 0) {
+		return;
 	}
-	delete [] b;
+	vector<int> visited(numOfElement, 0);
+
+	for (int i = 0; i < numOfSample; i++) {
+		int r = rand() % (numOfElement - i);
+		while (visited[r] == 1) {
+			r = (r + 1) % numOfElement;
+		}
+		array[i] = r;
+		visited[r] = 1;
+	}
 }
 
-double TRandom::normalDistribution( double mu, double sigma ){
+double TRandom::normalDistribution(double mu, double sigma){
 	double U1,U2,X;
 	double PI = 3.1415926;
 	while( 1 ){
@@ -74,12 +72,15 @@ double TRandom::normalDistribution( double mu, double sigma ){
 	return( mu + sigma*X );
 }
 
-void TRandom::shuffle( int *array, int numOfElement ){
-	int *a = new int[numOfElement];
-	int *b = new int[numOfElement];
-	this->permutation( b, numOfElement, numOfElement ); 
-	for( int i = 0; i < numOfElement; ++i ) a[ i ] = array[ i ]; 
-	for( int i = 0; i < numOfElement; ++i ) array[ i ] = a[ b[ i ] ]; 
-	delete [] a;
-	delete [] b;
+void TRandom::shuffle(vector<int>& array, int numOfElement){
+	vector<int> a(numOfElement);
+	vector<int> b(numOfElement);
+
+	this->permutation(b, numOfElement, numOfElement);
+	for (int i = 0; i < numOfElement; ++i) {
+		a[ i ] = array[ i ];
+	}
+	for (int i = 0; i < numOfElement; ++i) {
+		array[ i ] = a[ b[ i ] ];
+	}
 }

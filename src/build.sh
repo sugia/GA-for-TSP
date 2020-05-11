@@ -1,1 +1,0 @@
-g++ main.cpp cross.h cross.cpp environment.h environment.cpp evaluator.h evaluator.cpp indi.h indi.cpp kopt.h kopt.cpp randomize.h randomize.cpp sort.h sort.cpp

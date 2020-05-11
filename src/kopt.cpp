@@ -1,8 +1,8 @@
 /*
  * kopt.cpp
  *   created on: April 24, 2013
- * last updated: June 13, 2013
- *       author: liushujia
+ * last updated: May 10, 2020
+ *       author: Shujia Liu
  */
 
 
@@ -33,7 +33,7 @@ TKopt::TKopt( int N ){
 	for( int i = 0; i < fN; ++i ) fInvNearList[ i ] = new int [ 500 ];
 
 	fNumOfINL = new int [ fN ];
-	fArray = new int [ fN+2 ]; 
+	fArray = new int [ fN+2 ];
 	fCheckN = new int [ fN ];
 	fB = new int [ fN ];
 	fGene = new int [ fN ];
@@ -69,25 +69,25 @@ TKopt::~TKopt(){
 void TKopt::setInvNearList(){
 	for( int i = 0; i < fN; ++i ) fNumOfINL[ i ] = 0;
 	int c;
-	for( int i = 0; i < fN; ++i ){ 
-		for( int k = 0; k < 50; ++k ){ 
+	for( int i = 0; i < fN; ++i ){
+		for( int k = 0; k < 50; ++k ){
 			c = eval->fNearCity[i][k];
-			if( fNumOfINL[c] < 500 ) fInvNearList[ c ][ fNumOfINL[c]++ ] = i;  
+			if( fNumOfINL[c] < 500 ) fInvNearList[ c ][ fNumOfINL[c]++ ] = i;
 			else{
 				printf( "Check fNumOfINL[c] < 500 ) in kopt.cpp \n" );
 				fflush( stdout );
 			}
 		}
-	} 
+	}
 }
 
 void TKopt::transIndiToTree( TIndi& indi ){
 	int num, size, orient;
-	fArray[1] = 0; 
-	for( int i = 2; i <= fN; ++i ) fArray[i] = indi.fLink[ fArray[i-1] ][ 1 ]; 
+	fArray[1] = 0;
+	for( int i = 2; i <= fN; ++i ) fArray[i] = indi.fLink[ fArray[i-1] ][ 1 ];
 
-	fArray[0] = fArray[fN]; 
-	fArray[fN+1] = fArray[1]; 
+	fArray[0] = fArray[fN];
+	fArray[fN+1] = fArray[1];
 	num = 1;
 	fNumOfSeg = 0;
 	while(1){
@@ -128,7 +128,7 @@ void TKopt::transIndiToTree( TIndi& indi ){
 		++num;
 		++size;
 		fSizeSeg[ fNumOfSeg ] = size;
-		++fNumOfSeg; 
+		++fNumOfSeg;
 		if( num == fN+1 ) break;
 	}
 	for( int s = 1; s < fNumOfSeg-1; ++s ){
@@ -154,14 +154,14 @@ void TKopt::transTreeToIndi( TIndi& indi ){
 	eval->doIt( indi );
 }
 
-void TKopt::doIt( TIndi& tIndi ){ 
+void TKopt::doIt( TIndi& tIndi ){
 	this->transIndiToTree( tIndi );
 	this->sub();
 	this->transTreeToIndi( tIndi );
 }
 
 void TKopt::sub(){
-	int t1_st; 
+	int t1_st;
 	int dis1, dis2;
 	for( int t = 0; t < fN; ++t ) fActiveV[ t ] = 1;
 BEGIN:
@@ -174,7 +174,7 @@ BEGIN:
 		fFlagRev = 0;
 		fT[2] = this->getPrev( fT[1] );
 		for( int num1 = 1; num1 < 50; ++num1 ){
-			fT[4] = eval->fNearCity[ fT[1] ][ num1 ]; 
+			fT[4] = eval->fNearCity[ fT[1] ][ num1 ];
 			fT[3] = this->getPrev( fT[4] );
 			dis1 = eval->fEdgeDis[fT[1]][fT[2]] - eval->fEdgeDis[fT[1]][fT[4]];
 			if( dis1 > 0 ){
@@ -192,7 +192,7 @@ BEGIN:
 		fFlagRev = 1;
 		fT[2] = this->getNext( fT[1] );
 		for( int num1 = 1; num1 < 50; ++num1 ){
-			fT[4] = eval->fNearCity[ fT[1] ][ num1 ]; 
+			fT[4] = eval->fNearCity[ fT[1] ][ num1 ];
 			fT[3] = this->getNext( fT[4] );
 			dis1 = eval->fEdgeDis[fT[1]][fT[2]] - eval->fEdgeDis[fT[1]][fT[4]];
 			if( dis1 > 0 ){
@@ -258,9 +258,9 @@ void TKopt::incrementImp( int flagRev ){
 	int curr;
 	int ord;
 
-	int flag_t2e_t1s;    
-	int flag_t2s_t1e;    
-	int length_t1s_seg;  
+	int flag_t2e_t1s;
+	int flag_t2s_t1e;
+	int length_t1s_seg;
 	int length_t1e_seg;
 	int seg;
 
@@ -276,7 +276,7 @@ void TKopt::incrementImp( int flagRev ){
 		t2_s = fT[3];
 		t2_e = fT[1];
 	}
-  
+
 	seg_t1_s = fSegCity[ t1_s ];
 	ordSeg_t1_s = fOrdSeg[ seg_t1_s ];
 	orient_t1_s = fOrient[ seg_t1_s ];
@@ -289,10 +289,10 @@ void TKopt::incrementImp( int flagRev ){
 	seg_t2_e = fSegCity[ t2_e ];
 	ordSeg_t2_e = fOrdSeg[ seg_t2_e ];
 	orient_t2_e = fOrient[ seg_t2_e ];
-  
+
 	//////////////////// Type1 ////////////////////////
-	if( ( seg_t1_s == seg_t1_e ) && ( seg_t1_s == seg_t2_s ) && ( seg_t1_s == seg_t2_e ) ){ 
-		if( (fOrient[seg_t1_s] == 1 && (fOrdCity[ t1_s ] > fOrdCity[ t1_e ])) || 
+	if( ( seg_t1_s == seg_t1_e ) && ( seg_t1_s == seg_t2_s ) && ( seg_t1_s == seg_t2_e ) ){
+		if( (fOrient[seg_t1_s] == 1 && (fOrdCity[ t1_s ] > fOrdCity[ t1_e ])) ||
 			(fOrient[seg_t1_s] == 0 && (fOrdCity[ t1_s ] < fOrdCity[ t1_e ]))){
 			this->swap( t1_s, t2_s );
 			this->swap( t1_e, t2_e );
@@ -348,11 +348,11 @@ void TKopt::incrementImp( int flagRev ){
 
 	length_t1s_seg = abs( fOrdCity[ t2_e ] - fOrdCity[ fCitySeg[ seg_t2_e ][ orient_t2_e ] ] );
 	length_t1e_seg = abs( fOrdCity[ t2_s ] - fOrdCity[ fCitySeg[ seg_t2_s ][ this->turn(orient_t2_s) ] ] );
-  
+
 	///////////////////// Type2 /////////////////
 	if( seg_t1_s == seg_t1_e ){
 		if( flag_t2e_t1s == 1 && flag_t2s_t1e == 1 ){
-			orient_t1_s = turn( fOrient[ seg_t1_s ] ); 
+			orient_t1_s = turn( fOrient[ seg_t1_s ] );
 			fOrient[ seg_t1_s ] = orient_t1_s;
 			fCitySeg[ seg_t1_s ][ orient_t1_s ] = t1_s;
 			fCitySeg[ seg_t1_s ][ turn(orient_t1_s) ] = t1_e;
@@ -385,7 +385,7 @@ void TKopt::incrementImp( int flagRev ){
 				this->swap( fLink[curr][0], fLink[curr][1] );
 				fOrdCity[ curr ] = ord;
 				if( curr == t1_e ) break;
-				
+
 				curr = fLink[curr][turn(orient_t2_s)];
 				if( orient_t2_s == 0 ) ++ord;
 				else --ord;
@@ -408,7 +408,7 @@ void TKopt::incrementImp( int flagRev ){
 		fLink[ fCitySeg[seg_t2_e][orient_t2_e]][orient_t1_s] = -1;
 		fOrient[seg_t1_s] = orient_t1_s;
 		fSizeSeg[seg_t1_s] = length_t1s_seg;
-		fCitySeg[seg_t1_s][turn(orient_t1_s)] = t1_s;   
+		fCitySeg[seg_t1_s][turn(orient_t1_s)] = t1_s;
 		fCitySeg[seg_t1_s][orient_t1_s] = fCitySeg[seg_t2_e][orient_t2_e];
 		fLinkSeg[seg_t1_s][turn(orient_t1_s)] = seg_t2_s;
 		fLinkSeg[seg_t1_s][orient_t1_s] = fLinkSeg[seg_t2_e][orient_t2_e];
@@ -424,7 +424,7 @@ void TKopt::incrementImp( int flagRev ){
 		fLink[ fCitySeg[seg_t2_s][turn(orient_t2_s)] ][turn(orient_t1_e)] = -1;
 		fOrient[seg_t1_e] = orient_t1_e;
 		fSizeSeg[seg_t1_e] = length_t1e_seg;
-		fCitySeg[seg_t1_e][orient_t1_e] = t1_e;   
+		fCitySeg[seg_t1_e][orient_t1_e] = t1_e;
 		fCitySeg[seg_t1_e][turn(orient_t1_e)] = fCitySeg[seg_t2_s][turn(orient_t2_s)];
 		fLinkSeg[seg_t1_e][orient_t1_e] = seg_t2_e;
 		fLinkSeg[seg_t1_e][turn(orient_t1_e)] = fLinkSeg[seg_t2_s][turn(orient_t2_s)];
@@ -443,12 +443,12 @@ void TKopt::incrementImp( int flagRev ){
 
 	seg = seg_t1_e;
 	while(1){
-		fOrient[seg] = turn(fOrient[seg]); 
+		fOrient[seg] = turn(fOrient[seg]);
 		if( seg == seg_t1_s ) break;
 		seg = fLinkSeg[seg][fOrient[seg]];
 	}
-  
-	if( fSizeSeg[seg_t2_e] < length_t1s_seg ){  
+
+	if( fSizeSeg[seg_t2_e] < length_t1s_seg ){
 		seg = fLinkSeg[seg_t2_e][turn(fOrient[seg_t2_e])];
 		fLinkSeg[seg][fOrient[seg]] = seg_t1_s;
 		seg = fLinkSeg[seg_t2_e][fOrient[seg_t2_e]];
@@ -457,7 +457,7 @@ void TKopt::incrementImp( int flagRev ){
 		fLinkSeg[seg][fOrient[seg]] = seg_t2_e;
 		seg = fLinkSeg[seg_t1_s][fOrient[seg_t1_s]];
 		fLinkSeg[seg][turn(fOrient[seg])] = seg_t2_e;
-    
+
 		this->swap( fOrient[seg_t2_e], fOrient[seg_t1_s] );
 		this->swap( fSizeSeg[seg_t2_e], fSizeSeg[seg_t1_s] );
 		this->swap( fCitySeg[seg_t2_e][0], fCitySeg[seg_t1_s][0] );
@@ -467,7 +467,7 @@ void TKopt::incrementImp( int flagRev ){
 		this->swap( seg_t2_e, seg_t1_s );
 	}
 
-	if( fSizeSeg[seg_t2_s] < length_t1e_seg ){  
+	if( fSizeSeg[seg_t2_s] < length_t1e_seg ){
 		seg = fLinkSeg[seg_t2_s][turn(fOrient[seg_t2_s])];
 		fLinkSeg[seg][fOrient[seg]] = seg_t1_e;
 		seg = fLinkSeg[seg_t2_s][fOrient[seg_t2_s]];
@@ -487,10 +487,10 @@ void TKopt::incrementImp( int flagRev ){
 	}
 
 	while( fNumOfSeg > fFixNumOfSeg ){
-	if( fSizeSeg[ fLinkSeg[fNumOfSeg-1][0] ] < 
-		fSizeSeg[ fLinkSeg[fNumOfSeg-1][1] ] )  
+	if( fSizeSeg[ fLinkSeg[fNumOfSeg-1][0] ] <
+		fSizeSeg[ fLinkSeg[fNumOfSeg-1][1] ] )
 		this->combineSeg( fLinkSeg[fNumOfSeg-1][0], fNumOfSeg-1 );
-	else 
+	else
 		this->combineSeg( fLinkSeg[fNumOfSeg-1][1], fNumOfSeg-1 );
 	}
 	int ordSeg = 0;
@@ -511,14 +511,14 @@ void TKopt::combineSeg( int segL, int segS ){
 	int increment; increment = 0;
 	int curr, next;
 
-	if( fLinkSeg[segL][fOrient[segL]] == segS ){ 
-		fLink[fCitySeg[segL][fOrient[segL]]][fOrient[segL]] = fCitySeg[segS][turn(fOrient[segS])]; 
+	if( fLinkSeg[segL][fOrient[segL]] == segS ){
+		fLink[fCitySeg[segL][fOrient[segL]]][fOrient[segL]] = fCitySeg[segS][turn(fOrient[segS])];
 		fLink[fCitySeg[segS][turn(fOrient[segS])]][turn(fOrient[segS])] = fCitySeg[segL][fOrient[segL]];
-		ord = fOrdCity[fCitySeg[segL][fOrient[segL]]]; 
+		ord = fOrdCity[fCitySeg[segL][fOrient[segL]]];
 
-		fCitySeg[segL][fOrient[segL]] = fCitySeg[segS][fOrient[segS]]; 
-		fLinkSeg[segL][fOrient[segL]] = fLinkSeg[segS][fOrient[segS]]; 
-		seg = fLinkSeg[segS][fOrient[segS]]; 
+		fCitySeg[segL][fOrient[segL]] = fCitySeg[segS][fOrient[segS]];
+		fLinkSeg[segL][fOrient[segL]] = fLinkSeg[segS][fOrient[segS]];
+		seg = fLinkSeg[segS][fOrient[segS]];
 		fLinkSeg[seg][turn(fOrient[seg])] = segL;
 
 		t_s = fCitySeg[segS][turn(fOrient[segS])];
@@ -528,14 +528,14 @@ void TKopt::combineSeg( int segL, int segS ){
 		if( fOrient[segL] == 1 ) increment = 1;
 		else increment = -1;
 	}
-	else if( fLinkSeg[segL][turn(fOrient[segL])] == segS ){ 
-		fLink[fCitySeg[segL][turn(fOrient[segL])]][turn(fOrient[segL])] = fCitySeg[segS][fOrient[segS]]; 
+	else if( fLinkSeg[segL][turn(fOrient[segL])] == segS ){
+		fLink[fCitySeg[segL][turn(fOrient[segL])]][turn(fOrient[segL])] = fCitySeg[segS][fOrient[segS]];
 		fLink[fCitySeg[segS][fOrient[segS]]][fOrient[segS]] = fCitySeg[segL][turn(fOrient[segL])];
-		ord = fOrdCity[fCitySeg[segL][turn(fOrient[segL])]]; 
+		ord = fOrdCity[fCitySeg[segL][turn(fOrient[segL])]];
 
-		fCitySeg[segL][turn(fOrient[segL])] = fCitySeg[segS][turn(fOrient[segS])]; 
-		fLinkSeg[segL][turn(fOrient[segL])] = fLinkSeg[segS][turn(fOrient[segS])]; 
-		seg = fLinkSeg[segS][turn(fOrient[segS])]; 
+		fCitySeg[segL][turn(fOrient[segL])] = fCitySeg[segS][turn(fOrient[segS])];
+		fLinkSeg[segL][turn(fOrient[segL])] = fLinkSeg[segS][turn(fOrient[segS])];
+		seg = fLinkSeg[segS][turn(fOrient[segS])];
 		fLinkSeg[seg][fOrient[seg]] = segL;
 
 		t_s = fCitySeg[segS][fOrient[segS]];
@@ -552,7 +552,7 @@ void TKopt::combineSeg( int segL, int segS ){
 		fOrdCity[curr] = ord;
 
 		next = fLink[curr][direction];
-		if( fOrient[segL] != fOrient[segS] ) this->swap( fLink[curr][0], fLink[curr][1] ); 
+		if( fOrient[segL] != fOrient[segS] ) this->swap( fLink[curr][0], fLink[curr][1] );
 
 		if( curr == t_e ) break;
 		curr = next;
@@ -580,13 +580,13 @@ void TKopt::checkDetail(){
 		if( ord_p < 0 ) ord_p = fNumOfSeg - 1;
 
 		ord_n = ord + 1;
-		if( ord_n >= fNumOfSeg ) ord_n = 0; 
+		if( ord_n >= fNumOfSeg ) ord_n = 0;
 
 		curr = fCitySeg[ s ][ 0 ];
 		int count = 0;
 
 		while(1){
-			++count; 
+			++count;
 			if( curr == fCitySeg[ s ][1] ) break;
 			curr = fLink[curr][1];
 		}
@@ -595,10 +595,10 @@ void TKopt::checkDetail(){
 	for( t = 0; t < fN; ++t ){
 		seg = fSegCity[ t ];
 		orient = fOrient[ seg ];
-		t_s = fCitySeg[ seg ][ 0 ]; 
-		t_e = fCitySeg[ seg ][ 1 ]; 
+		t_s = fCitySeg[ seg ][ 0 ];
+		t_e = fCitySeg[ seg ][ 1 ];
 
-		t_p = fLink[ t ][ 0 ];      
+		t_p = fLink[ t ][ 0 ];
 		t_n = fLink[ t ][ 1 ];
 	}
 }
@@ -626,7 +626,7 @@ void TKopt::checkValid(){
 			break;
 		}
 	}
-	for( int i = 0; i < fN; ++i )  
+	for( int i = 0; i < fN; ++i )
 		if( fCheckN[ i ] == 0 ) Invalid = 1;
 
 	if( Invalid == 1 ) printf( "Invalid \n" ); fflush( stdout );
@@ -636,20 +636,20 @@ void TKopt::checkValid(){
 void TKopt::makeRandSol( TIndi& indi ){
 	for( int j = 0; j < fN; ++j ) fB[j] = j;
 	int r;
-	for( int i = 0; i < fN; ++i ){  
+	for( int i = 0; i < fN; ++i ){
 		r = rand() % (fN-i);
 		fGene[i] = fB[r];
 		fB[r] = fB[fN-i-1];
 	}
-   
+
 	for( int j2 = 1 ; j2 < fN-1; ++j2 ){
 		indi.fLink[fGene[j2]][0] = fGene[j2-1];
 		indi.fLink[fGene[j2]][1] = fGene[j2+1];
 	}
 	indi.fLink[fGene[0]][0] = fGene[fN-1];
-	indi.fLink[fGene[0]][1] = fGene[1];  
+	indi.fLink[fGene[0]][1] = fGene[1];
 	indi.fLink[fGene[fN-1]][0] = fGene[fN-2];
-	indi.fLink[fGene[fN-1]][1] = fGene[0]; 
+	indi.fLink[fGene[fN-1]][1] = fGene[0];
 
 	eval->doIt( indi );
 }

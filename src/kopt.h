@@ -1,8 +1,8 @@
 /*
  * kopt.h
  *   created on: April 24, 2013
- * last updated: June 13, 2013
- *       author: liushujia
+ * last updated: May 10, 2020
+ *       author: Shujia Liu
  */
 
 #ifndef __KOPT__
@@ -35,8 +35,8 @@ public:
 	void setInvNearList();
 	void transIndiToTree( TIndi& indi );
 	void transTreeToIndi( TIndi& indi );
-	void doIt( TIndi& tIndi );			// 局部搜索(2-opt neighborhood)
-  
+	void doIt( TIndi& tIndi );
+
 	int getNext( int t );
 	int getPrev( int t );
 	int turn( int &orient );
@@ -48,7 +48,7 @@ public:
 	void checkDetail();
 	void checkValid();
 	void swap(int &x, int &y);
-	void makeRandSol( TIndi& indi );		// 设置随机路程
+	void makeRandSol( TIndi& indi );
 
 	TEvaluator* eval;
 

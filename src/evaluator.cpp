@@ -1,8 +1,8 @@
 /*
  * evaluator.cpp
  *   created on: April 24, 2013
- * last updated: June 13, 2013
- *       author: liushujia
+ * last updated: May 10, 2020
+ *       author: Shujia Liu
  */
 
 #ifndef __EVALUATOR__
@@ -12,7 +12,7 @@ TEvaluator::TEvaluator(){
 	fEdgeDis = NULL;
 	fNearCity = NULL;
 	Ncity = 0;
-	fNearNumMax = 50;  
+	fNearNumMax = 50;
 }
 
 TEvaluator::~TEvaluator(){
@@ -34,28 +34,28 @@ void TEvaluator::setInstance( char filename[] ){
 	while( 1 ){
 		if( fscanf( fp, "%s", word ) == EOF ) break;
 		if( strcmp( word, "DIMENSION" ) == 0 ){
-			fscanf( fp, "%s", word ); 
-			fscanf( fp, "%d", &Ncity ); 
-		} 
+			fscanf( fp, "%s", word );
+			fscanf( fp, "%d", &Ncity );
+		}
 		if( strcmp( word, "EDGE_WEIGHT_TYPE" ) == 0 ){
-			fscanf( fp, "%s", word ); 
-			fscanf( fp, "%s", type ); 
-		} 
+			fscanf( fp, "%s", word );
+			fscanf( fp, "%s", type );
+		}
 		if( strcmp( word, "NODE_COORD_SECTION" ) == 0 ) break;
 	}
 	if( strcmp( word, "NODE_COORD_SECTION" ) != 0 ){
 		printf( "Error in reading the instance\n" );
 		exit(0);
 	}
-	x = new double [ Ncity ]; 
-	y = new double [ Ncity ]; 
+	x = new double [ Ncity ];
+	y = new double [ Ncity ];
 	int *checkedN = new int[Ncity];
 
 	for( int i = 0; i < Ncity; ++i ){
 		fscanf( fp, "%d", &n );
-		fscanf( fp, "%s", word ); 
+		fscanf( fp, "%s", word );
 		x[ i ] = atof( word );
-		fscanf( fp, "%s", word ); 
+		fscanf( fp, "%s", word );
 		y[ i ] = atof( word );
 	}
 	fclose(fp);
@@ -69,17 +69,17 @@ void TEvaluator::setInstance( char filename[] ){
 			for( int j = 0; j < Ncity ; ++j )
 				fEdgeDis[ i ][ j ]=(int)(sqrt((x[i]-x[j])*(x[i]-x[j])+(y[i]-y[j])*(y[i]-y[j]))+0.5);
 	}
-	else if( strcmp( type, "ATT" ) == 0  ) { 
+	else if( strcmp( type, "ATT" ) == 0  ) {
 		for( int i = 0; i < Ncity; ++i ){
 			for( int j = 0; j < Ncity; ++j ) {
 				double r = (sqrt(((x[i]-x[j])*(x[i]-x[j])+(y[i]-y[j])*(y[i]-y[j]))/10.0));
 				int t = (int)r;
 				if( (double)t < r ) fEdgeDis[ i ][ j ] = t+1;
-				else fEdgeDis[ i ][ j ] = t; 
+				else fEdgeDis[ i ][ j ] = t;
 			}
 		}
 	}
-	else if( strcmp( type, "CEIL_2D" ) == 0  ){  
+	else if( strcmp( type, "CEIL_2D" ) == 0  ){
 	for( int i = 0; i < Ncity ; ++i )
 		for( int j = 0; j < Ncity ; ++j )
 			fEdgeDis[ i ][ j ]=(int)ceil(sqrt((x[i]-x[j])*(x[i]-x[j])+(y[i]-y[j])*(y[i]-y[j])));
@@ -97,7 +97,7 @@ void TEvaluator::setInstance( char filename[] ){
 		fNearCity[ ci ][ 0 ] = ci;
 		for( j1 = 1; j1 <= fNearNumMax; ++j1 ) {
 			minDis = 100000000;
-			for( j2 = 0; j2 < Ncity; ++j2 ){ 
+			for( j2 = 0; j2 < Ncity; ++j2 ){
 				if( fEdgeDis[ ci ][ j2 ] <= minDis && checkedN[ j2 ] == 0 ){
 					cityNum = j2;
 					minDis = fEdgeDis[ ci ][ j2 ];
@@ -110,7 +110,7 @@ void TEvaluator::setInstance( char filename[] ){
 }
 
 void TEvaluator::doIt( TIndi& indi ){
-	int d = 0;  
+	int d = 0;
 	for( int i = 0; i < Ncity; ++i ) d += fEdgeDis[ i ][ indi.fLink[i][0] ] + fEdgeDis[ i ][ indi.fLink[i][1] ];
 	indi.fEvaluationValue = d/2;
 }
@@ -133,11 +133,11 @@ void TEvaluator::writeTo( FILE* fp, TIndi& indi ){
 	}
 	if( this->checkValid( Array, indi.fEvaluationValue ) == false )
 		printf( "Individual is invalid \n" );
-	
+
 	fprintf( fp, "%d %d\n", indi.fN, indi.fEvaluationValue );
 	for( int i = 0; i < indi.fN; ++i )
 		fprintf( fp, "%d ", Array[ i ] );
-	fprintf( fp, "\n" ); 
+	fprintf( fp, "\n" );
 }
 
 bool TEvaluator::checkValid( int* array, int value ){
@@ -146,7 +146,7 @@ bool TEvaluator::checkValid( int* array, int value ){
 	for( int i = 0; i < Ncity; ++i ) ++check[ array[ i ]-1 ];
 	for( int i = 0; i < Ncity; ++i )
 		if( check[ i ] != 1 ) return false;
-	int distance = 0;  
+	int distance = 0;
 	for( int i = 0; i < Ncity-1; ++i )
 		distance += fEdgeDis[ array[ i ]-1 ][ array[ i+1 ]-1 ];
 
