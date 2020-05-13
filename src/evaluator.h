@@ -14,23 +14,26 @@
 
 #include <string.h>
 #include <assert.h>
+#include <vector>
+#include <string>
+using namespace std;
 
 class TEvaluator{
 public:
 	TEvaluator();
 	~TEvaluator();
-	void setInstance( char filename[] ); // sets variables
+	void setInstance(const string& filename); // sets variables
 	void doIt( TIndi& indi ); // sets indi.fEvaluationValue
 	void writeTo( FILE* fp, TIndi& indi ); // prints out TSP solution
-	bool checkValid( int* array, int value ); // checks if TSP solution is valid
+	bool checkValid(vector<int>& array, int value ); // checks if TSP solution is valid
 
 	int fNearNumMax; // the maximum value of the number of nearby points
-	int **fNearCity; // NearCity[i][k] is the k points that with a shortest distance from point i
-	int **fEdgeDis; // EdgeDis[i][j] is the distance from city i to city j
+	vector<vector<int>> fNearCity; // NearCity[i][k] is the k points that with a shortest distance from point i
+	vector<vector<int>> fEdgeDis; // EdgeDis[i][j] is the distance from city i to city j
 	int Ncity; // the number of cities
-	double *x; // x[i] is the x coordinate of city i
-	double *y; // y[i] is the y coordinate of city i
-	int *Array; // the index of best solution
+	vector<double> x; // x[i] is the x coordinate of city i
+	vector<double> y; // y[i] is the y coordinate of city i
+	vector<int> Array; // the index of best solution
 };
 
 #endif
